@@ -59,13 +59,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
         backgroundColor: '#ffffff',
+        borderRadius: 2,
     },
     button: {
         width: '88%',
         margin: 15,
         padding: 10,
         alignItems: 'center',
-        backgroundColor: '#757083'
+        backgroundColor: '#757083',
+        borderRadius: 2,
     },
     buttonText: {
         fontSize: 16,
@@ -100,6 +102,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1.5,
         borderColor: '#757083',
+        borderRadius: 2,
         marginTop: 10,
         marginBottom: 10
     },
