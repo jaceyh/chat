@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ImageBackground, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { ImageBackground, StyleSheet, View, Text, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView } from 'react-native';
 import Chat from './Chat';
 
 const image = {uri: '../assets/BackgroundImage.png'}
@@ -30,7 +30,7 @@ const Start = ({ navigation }) => {
                     key={index}
                     style={[styles.circle, { backgroundColor: color }, background === color && styles.selectedColor,]} onPress={() => setBackground(color)} />
                 ))}
-        </View>  
+            </View>  
             <TouchableOpacity
             style={styles.button}
             title="Enter Chat"
@@ -39,6 +39,7 @@ const Start = ({ navigation }) => {
             style={styles.buttonText}>Enter Chat</Text>
             </TouchableOpacity>
             </View>
+            {Platform.OS === "ios"?<KeyboardAvoidingView behavior="padding" />: null}
         </ImageBackground>
     );
 }

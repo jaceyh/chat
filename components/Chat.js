@@ -1,6 +1,6 @@
-import { GiftedChat } from "react-native-gifted-chat";
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Platform, KeyboardAvoidingView } from 'react-native';
 
 const Chat = ({ route, navigation }) => {
 
@@ -12,6 +12,20 @@ const Chat = ({ route, navigation }) => {
     const onSend = (newMessages) => {
         setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
     };
+
+    const renderBubble = (props) => {
+        return <Bubble
+            {...props}
+            wrapperStyle={{
+            right: {
+              backgroundColor: "#000"
+            },
+            left: {
+              backgroundColor: "#FFF"
+            }
+            }}
+        />
+        }  
 
     useEffect(() => {
         navigation.setOptions({title: name});
@@ -29,19 +43,29 @@ const Chat = ({ route, navigation }) => {
               avatar: "https://placeimg.com/140/140/any",
             },
           },
+          {
+            _id: 2,
+            text: 'This is a system message',
+            createdAt: new Date(),
+            system: true,
+          },
         ]);
       }, []);
 
 
     return (
-        <GiftedChat 
-        style={[styles.container, {backgroundColor: color}]}
-        messages={messages}
-        onSend={messages => onSend(messages)}
-        user={{
-          _id: 1
-        }}
-        />
+        <View style={[styles.outerView, {backgroundColor: color}]}>
+            <GiftedChat 
+            style={styles.container}
+            messages={messages}
+            renderBubble={renderBubble}
+            onSend={messages => onSend(messages)}
+            user={{
+                _id: 1
+            }}
+            />
+            { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null }
+        </View>
     );
 }
 
@@ -50,6 +74,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    outerView: {
+        flex: 1
     }
 });
 
