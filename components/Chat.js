@@ -9,6 +9,10 @@ const Chat = ({ route, navigation }) => {
     const { name } = route.params;
     const { color } = route.params;
 
+    const onSend = (newMessages) => {
+        setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
+    };
+
     useEffect(() => {
         navigation.setOptions({title: name});
     }, []);
@@ -30,10 +34,14 @@ const Chat = ({ route, navigation }) => {
 
 
     return (
-        <View style={[styles.container, {backgroundColor: color}]}>
-            <Text>Welcome to your Chat!</Text>
-        </View>
-
+        <GiftedChat 
+        style={[styles.container, {backgroundColor: color}]}
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: 1
+        }}
+        />
     );
 }
 
