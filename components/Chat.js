@@ -1,26 +1,18 @@
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Platform, KeyboardAvoidingView } from 'react-native';
-import { collection, getDocs } from "firebase/firestore";
+import { StyleSheet, View, Platform, KeyboardAvoidingView, Alert } from 'react-native';
+import { collection, onSnapshot, query, addDoc, orderBy } from "firebase/firestore";
 
 const Chat = ({ route, navigation, db }) => {
 
     const [messages, setMessages] = useState([]);
 
     const { name } = route.params;
+    const { userID } = route.params;
     const { color } = route.params;
 
-    const fetchMessages = async () => {
-        const messageDocs = await getDocs(collection(db, "messages"));
-        let newMessages = [];
-            messageDocs.forEach(docObject => {
-                newMessages.push({ id: docObject.id, ...docObject.data() })
-            });
-            setMessages(newMessages);
-    }
-
     const onSend = (newMessages) => {
-        setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
+        addDoc(collection(db, "messages"), newMessages[0])
     };
 
     const renderBubble = (props) => {
@@ -42,8 +34,20 @@ const Chat = ({ route, navigation, db }) => {
     }, []);
 
     useEffect(() => {
-        fetchMessages();
-      }, [`${messages}`]);
+        const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+        const unsubMessages = onSnapshot(q, (documentsSnapshot) => {
+            let newMessages = [];
+                documentsSnapshot.forEach(doc => {
+                    newMessages.push({ id: doc.id, ...doc.data(), createdAt: new Date(doc.data().createdAt.toMillis()) })
+                });
+                setMessages(newMessages);
+        });
+
+        //clean-up code
+        return () => {
+            if (unsubMessages) unsubMessages();
+        }
+    }, [`${messages}`]);
 
 
     return (
@@ -54,10 +58,13 @@ const Chat = ({ route, navigation, db }) => {
             renderBubble={renderBubble}
             onSend={messages => onSend(messages)}
             user={{
-                _id: 1
+                _id: userID,
+                name: name,
+                backgroundColor: color
             }}
             />
             { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null }
+            { Platform.OS === 'ios' ? <KeyboardAvoidingView behavior="padding" /> : null }
         </View>
     );
 }
