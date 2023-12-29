@@ -1,6 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
+/*
+Tried to hide API key
+const fs = require('fs');
+require('dotenv').config();
+*/
+
 //import react Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -33,21 +39,18 @@ const App = () => {
     const app = initializeApp(firebaseConfig);
     // Initialize Cloud Firestore and get a reference to the service
     const db = getFirestore(app);
-    // Initialize firebase analytics
-    const analytics = getAnalytics(app);
 
     return (
         <NavigationContainer>
             
             <Stack.Navigator
-            initialRouteName="Start" >
+            initialRouteName="Start">
                 <Stack.Screen
                 name="Start"
                 component={Start}
                 />
                 <Stack.Screen
                 name="Chat"
-                component={Chat}
                 >
                 {props => <Chat db={db} {...props} />}
                 </Stack.Screen>

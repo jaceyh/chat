@@ -1,13 +1,23 @@
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Platform, KeyboardAvoidingView } from 'react-native';
+import { collection, getDocs } from "firebase/firestore";
 
-const Chat = ({ route, navigation }) => {
+const Chat = ({ route, navigation, db }) => {
 
     const [messages, setMessages] = useState([]);
 
     const { name } = route.params;
     const { color } = route.params;
+
+    const fetchMessages = async () => {
+        const messageDocs = await getDocs(collection(db, "messages"));
+        let newMessages = [];
+            messageDocs.forEach(docObject => {
+                newMessages.push({ id: docObject.id, ...docObject.data() })
+            });
+            setMessages(newMessages);
+    }
 
     const onSend = (newMessages) => {
         setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
@@ -25,32 +35,15 @@ const Chat = ({ route, navigation }) => {
             }
             }}
         />
-        }  
+        }
 
     useEffect(() => {
         navigation.setOptions({title: name});
     }, []);
 
     useEffect(() => {
-        setMessages([
-          {
-            _id: 1,
-            text: "Hello developer",
-            createdAt: new Date(),
-            user: {
-              _id: 2,
-              name: "React Native",
-              avatar: "https://placeimg.com/140/140/any",
-            },
-          },
-          {
-            _id: 2,
-            text: 'This is a system message',
-            createdAt: new Date(),
-            system: true,
-          },
-        ]);
-      }, []);
+        fetchMessages();
+      }, [`${messages}`]);
 
 
     return (
