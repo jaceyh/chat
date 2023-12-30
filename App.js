@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { useEffect } from 'react';
 
 /*
 Tried to hide API key
@@ -13,7 +14,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //import Firestore
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
+
+//import useNetInfo to determine user's connectivity status
+import { useNetInfo } from "@react-native-community/netinfo";
 
 // import screens
 import Start from './components/Start';
@@ -37,8 +41,23 @@ const App = () => {
 
     // Initialize firebase
     const app = initializeApp(firebaseConfig);
+
     // Initialize Cloud Firestore and get a reference to the service
     const db = getFirestore(app);
+
+    // define a new state the represents connectivity status
+    const connectionStatus = useNetInfo();
+
+    // display an alert and disable attempts to reconnect to Firestore if connection is lost
+    useEffect(() => {
+        if (connectionStatus.isConnected === false) {
+            Alert.alert("Connection lost!");
+            disableNetwork(db);
+        }else if (connectionStatus.isConnected === true) {
+            enableNetwork(db);
+        }
+    }, [connectionStatus.isConnected]);
+
 
     return (
         <NavigationContainer>
@@ -52,7 +71,7 @@ const App = () => {
                 <Stack.Screen
                 name="Chat"
                 >
-                {props => <Chat db={db} {...props} />}
+                {props => <Chat db={db} isConnected={connectionStatus.isConnected} {...props} />}
                 </Stack.Screen>
             </Stack.Navigator>
 
@@ -66,6 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 15
   },
 });
 
