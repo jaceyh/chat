@@ -1,6 +1,6 @@
 import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Platform, KeyboardAvoidingView, Alert } from 'react-native';
+import { StyleSheet, View, Platform, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { collection, onSnapshot, query, addDoc, orderBy } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -13,7 +13,8 @@ const Chat = ({ route, navigation, db, isConnected }) => {
     const { color } = route.params;
 
     const onSend = (newMessages) => {
-        addDoc(collection(db, "messages"), newMessages[0])
+        addDoc(collection(db, "messages"), newMessages[0]);
+        Keyboard.dismiss();
     };
 
     //customize GiftedChat objects
@@ -22,7 +23,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
             {...props}
             wrapperStyle={{
             right: {
-              backgroundColor: "#AAA",
+              backgroundColor: "#000",
               padding: 5,
               marginBottom: 5
             },
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 15,
         marginBottom: 15,
-        borderWidth: 0.5,
+        borderWidth: 1,
         borderColor: '#AAA',
         borderRadius: 23
     }
