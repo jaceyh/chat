@@ -16,12 +16,13 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         addDoc(collection(db, "messages"), newMessages[0])
     };
 
+    //customize GiftedChat objects
     const renderBubble = (props) => {
         return <Bubble
             {...props}
             wrapperStyle={{
             right: {
-              backgroundColor: "#000",
+              backgroundColor: "#AAA",
               padding: 5,
               marginBottom: 5
             },
