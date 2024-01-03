@@ -16,6 +16,8 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
 
     const actionSheet = useActionSheet();
 
+    const newUploadRef = ref(storage, 'image123');
+
     //const states for images and locations
     const [image, setImage] = useState(null);
     const [location, setLocation] = useState(null);
@@ -72,11 +74,13 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
     
         if (permissions?.granted) {
           let result = await ImagePicker.launchCameraAsync();
+          let mediaLibraryPermissions = await MediaLibrary.requestPermissionsAsync();
+
+          if (mediaLibraryPermissions?.granted) await MediaLibrary.saveToLibraryAsync(result.assets[0].uri);
+          else Alert.alert("This photo will not be saved to your device.")
     
             if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
             else Alert.alert("Permissions haven't been granted.");
-
-            if (mediaLibraryPermissions?.granted) await MediaLibrary.saveToLibraryAsync(result.assets[0].uri);
         }
     }
 
