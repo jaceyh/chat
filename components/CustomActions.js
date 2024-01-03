@@ -16,8 +16,6 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
 
     const actionSheet = useActionSheet();
 
-    const newUploadRef = ref(storage, 'image123');
-
     //const states for images and locations
     const [image, setImage] = useState(null);
     const [location, setLocation] = useState(null);
