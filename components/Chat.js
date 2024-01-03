@@ -122,22 +122,6 @@ const Chat = ({ route, navigation, db, storage, isConnected }) => {
                 />
             );
         }
-    /*    if (currentMessage.image) {
-            return (
-               setMessages(
-                {
-                    _id: 1,
-                    text: 'My message',
-                    createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
-                    user: {
-                      _id: 2,
-                      name: 'React Native',
-                      avatar: 'https://facebook.github.io/react-native/img/header_logo.png',
-                    },
-                    image: 'https://facebook.github.io/react-native/img/header_logo.png',
-                })
-            );
-        }*/
         return null;
     };
 
