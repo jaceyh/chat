@@ -57,7 +57,7 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
     }
 
     const pickImage = async () => {
-        let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        let permissions = await ImagePicker.requestPermissionsAsync();
     
         if (permissions?.granted) {
            let result = await ImagePicker.launchImageLibraryAsync();
