@@ -8,7 +8,7 @@ import * as MediaLibrary from 'expo-media-library';
 import * as Location from 'expo-location';
 import MapView from 'react-native-maps';
 
-//import image storage dependencies from firebase
+//import image dependencies from firebase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 
