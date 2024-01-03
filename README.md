@@ -11,5 +11,10 @@ Provides users with a customizable chat interface and options to share images an
 * Image and Location Sharing<br>
 * View Cached Chats While Offline<br>
 
-
+## Technologies Used:
+* Developed and tested using Expo<br>
+* Chat interface and functionalities created using React Native Gifted Chat<br>
+* Storage sources: Google Firestore Database (images) and user's device local storage<br>
+* Users authenticated anonymously using Google Firebase authentication<br>
+* Designed according to client specifications<br>
 
