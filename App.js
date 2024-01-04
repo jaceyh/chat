@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Alert } from 'react-native';
+//import React and React Native functions
+import { StyleSheet, Alert, LogBox } from 'react-native';
 import { useEffect } from 'react';
 
 /*
@@ -8,7 +8,7 @@ const fs = require('fs');
 require('dotenv').config();
 */
 
-//import react Navigation
+//import React Native Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -27,6 +27,9 @@ import Chat from './components/Chat';
 
 // Create the navigator
 const Stack = createNativeStackNavigator();
+
+//ignore outdated logs
+LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
 
 const App = () => {
 

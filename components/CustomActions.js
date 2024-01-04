@@ -16,9 +16,10 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
 
     const actionSheet = useActionSheet();
 
-    //const states for images and locations
+    /*const states for images and locations
     const [image, setImage] = useState(null);
     const [location, setLocation] = useState(null);
+    */
 
     //options available with press of action sheet menu button
     const onActionPress = () => {
@@ -45,23 +46,12 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
         );
     };
 
-    const uploadAndSendImage = async (imageURI) => {
-        const uniqueRefString = generateReference(imageURI);
-        const newUploadRef = ref(storage, uniqueRefString);
-        const response = await fetch(imageURI);
-        const blob = await response.blob();
-        uploadBytes(newUploadRef, blob).then(async (snapshot) => {
-            const imageURL = await getDownloadURL(snapshot.ref)
-            onSend({ image: imageURL })
-        });
-    }
-
     const pickImage = async () => {
-        let permissions = await ImagePicker.requestPermissionsAsync();
+        let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
     
         if (permissions?.granted) {
-           let result = await ImagePicker.launchImageLibraryAsync();
-    
+            let result = await ImagePicker.launchImageLibraryAsync();
+            
             if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
             else Alert.alert("Permissions haven't been granted");
         }
@@ -71,12 +61,8 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
         let permissions = await  ImagePicker.requestCameraPermissionsAsync();
     
         if (permissions?.granted) {
-          let result = await ImagePicker.launchCameraAsync();
-          let mediaLibraryPermissions = await MediaLibrary.requestPermissionsAsync();
+            let result = await ImagePicker.launchCameraAsync();
 
-          if (mediaLibraryPermissions?.granted) await MediaLibrary.saveToLibraryAsync(result.assets[0].uri);
-          else Alert.alert("This photo will not be saved to your device.")
-    
             if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
             else Alert.alert("Permissions haven't been granted.");
         }
@@ -106,6 +92,17 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
         const imageName = uri.split("/")[uri.split("/").length - 1];
         const timeStamp = (new Date()).getTime();
         return `${userID}-${timeStamp}-${imageName}`;
+    }
+
+    const uploadAndSendImage = async (imageURI) => {
+        const uniqueRefString = generateReference(imageURI);
+        const newUploadRef = ref(storage, uniqueRefString);
+        const response = await fetch(imageURI);
+        const blob = await response.blob();
+        uploadBytes(newUploadRef, blob).then(async (snapshot) => {
+            const imageURL = await getDownloadURL(snapshot.ref)
+            onSend({ image: imageURL })
+        });
     }
 
     return (

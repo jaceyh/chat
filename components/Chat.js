@@ -1,7 +1,9 @@
+//import Gifted Chat, React Native and React functions
 import { GiftedChat, Bubble, InputToolbar, Send, CustomView } from "react-native-gifted-chat";
-import { useState, useEffect } from 'react';
 import { StyleSheet, View, Platform, KeyboardAvoidingView, Keyboard } from 'react-native';
-//import acion functionalities from react-native
+import { useState, useEffect } from 'react';
+
+//import acion functionalities from react-native-maps
 import MapView from 'react-native-maps';
 
 //import storage features from firestore and react-native
@@ -24,12 +26,10 @@ const Chat = ({ route, navigation, db, storage, isConnected }) => {
         Keyboard.dismiss();
     };
 
-    useEffect(() => {
-        navigation.setOptions({title: name});
-    }, []);
-
     let unsubMessages;
     useEffect(() => {
+        navigation.setOptions({title: name});
+
         if (isConnected === true) {
 
             // unregister current onSnapshot() listener to avoid registering multiple listeners when
@@ -41,7 +41,8 @@ const Chat = ({ route, navigation, db, storage, isConnected }) => {
             unsubMessages = onSnapshot(q, (documentsSnapshot) => {
                 let newMessages = [];
                 documentsSnapshot.forEach(doc => {
-                    newMessages.push({ id: doc.id, ...doc.data(), createdAt: new Date(doc.data().createdAt.toMillis()) })
+                    newMessages.push({ id: doc.id, ...doc.data(), createdAt: new Date(doc.data().createdAt.toMillis()) 
+                    })
                 });
                 cacheMessages(newMessages);
                 setMessages(newMessages);
@@ -52,14 +53,14 @@ const Chat = ({ route, navigation, db, storage, isConnected }) => {
         return () => {
             if (unsubMessages) unsubMessages();
         }
-    }, [`${messages}`, isConnected]);
+    }, [/*`${messages}`,*/ isConnected]);
 
 
     const cacheMessages = async (messagesToCache) => {
         try {
             await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
         } catch (error) {
-            console.log(error.message);
+            console.log(error.message, "cacheMessages()");
         }
     }
 
@@ -88,6 +89,7 @@ const Chat = ({ route, navigation, db, storage, isConnected }) => {
         />
     }
 
+    //these will not render input toolbar and send button if no connection
     const renderInputToolbar = (props) => {
         if (isConnected) return <InputToolbar {...props} 
         containerStyle={styles.InputToolbar} />;
@@ -102,12 +104,12 @@ const Chat = ({ route, navigation, db, storage, isConnected }) => {
     
 
     const renderCustomActions = (props) => {
-        return <CustomActions storage={storage} {...props} />;
+        return <CustomActions userID={userID} storage={storage} {...props} />;
     };
 
 
     const renderCustomView = (props) => {
-        const { currentMessage} = props;
+        const {currentMessage} = props;
         
         if (currentMessage.location) {
             return (
