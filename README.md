@@ -41,7 +41,14 @@ Here's how I set one up:
 6. Create a Virtual Device and be sure to select one with the Google Play Icon.
 7. Once your virtual device is created, click on the Play button and your emulator will "Start Up".
 
+### Setting Up Storage
 If you want your App to save any message data from the chat, you'll need a storage solution.  I used Google Firebase, instructions for implementing below.
+1. Head to [Google Firebase](https://firebase.google.com/) and click on Get Started.  If this is your first time using Google Firebase, complete your registration before moving to Step 2.
+2. Click on 'Add a Project' or 'Create a Project'.  Once it loads, click **Continue** and give your project a name.
+3. From the **Build** menu on the left hand side of your screen, click on **Firestore Database**, and then click on Create Database in the main screen.
+4. Create your Database in Production Mode, Select the Multi-region network that's closest to you, and click Next.
+5. Click on the **Rules** tab and change ```allow read, write: if false;``` to ```allow read, write: if true;``` and click on the Publish button.
+6. Once you create your Expo project (next section), you'll come back to Firebase to register your app and connect it to your Web App with the Firebase SDK.
 
 ## Creating an Expo Project
 1. ```npx create-expo-app your-app-title --template```<br>
