@@ -46,25 +46,39 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
         );
     };
 
+
     const pickImage = async () => {
         let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
     
         if (permissions?.granted) {
-            let result = await ImagePicker.launchImageLibraryAsync();
+            try{
+                let result = await ImagePicker.launchImageLibraryAsync();
             
-            if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
-            else Alert.alert("Permissions haven't been granted");
-        }
+                if (!result.canceled) {
+                    let fileUri = await ImagePicker.getUriAsync(result.assets[0].uri);
+                    await uploadAndSendImage(fileUri);
+                }
+            } catch (error) {
+                console.error("Error picking image:", error);
+                Alert.alert("Failed to pick image. Please try again or check permissions.");
+            }
+        };
     }
+
 
     const takePhoto = async () => {
         let permissions = await  ImagePicker.requestCameraPermissionsAsync();
     
         if (permissions?.granted) {
-            let result = await ImagePicker.launchCameraAsync();
-
-            if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
-            else Alert.alert("Permissions haven't been granted.");
+            try{            
+                let result = await ImagePicker.launchCameraAsync();
+                //process selected image..
+    
+                if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
+            } catch (error) {
+                console.error("Error picking image:", error);
+                Alert.alert("Permissions haven't been granted.");
+            }    
         }
     }
 
@@ -95,15 +109,22 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
     }
 
     const uploadAndSendImage = async (imageURI) => {
-        const uniqueRefString = generateReference(imageURI);
-        const newUploadRef = ref(storage, uniqueRefString);
-        const response = await fetch(imageURI);
-        const blob = await response.blob();
-        uploadBytes(newUploadRef, blob).then(async (snapshot) => {
-            const imageURL = await getDownloadURL(snapshot.ref)
-            onSend({ image: imageURL })
-        });
-    }
+        try {
+            const uniqueRefString = generateReference(imageURI);
+            const newUploadRef = ref(storage, uniqueRefString);
+
+            const response = await fetch(imageURI);
+            const blob = await response.blob();
+
+            await uploadBytes(newUploadRef, blob)
+                .then(async (snapshot) => {
+                const imageURL = await getDownloadURL(snapshot.ref)
+                onSend({ image: imageURL })
+            });
+        } catch (error) {
+            console.log(error, "Error during image upload:");
+        }
+    };
 
     return (
         <TouchableOpacity 
