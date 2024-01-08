@@ -54,10 +54,9 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
             try{
                 let result = await ImagePicker.launchImageLibraryAsync();
             
-                if (!result.canceled) {
-                    let fileUri = await ImagePicker.getUriAsync(result.assets[0].uri);
-                    await uploadAndSendImage(fileUri);
-                }
+                if (!result.canceled) await uploadAndSendImage(result.assets[0].uri);
+                else Alert.alert("Permissions haven't been granted");
+                
             } catch (error) {
                 console.error("Error picking image:", error);
                 Alert.alert("Failed to pick image. Please try again or check permissions.");
