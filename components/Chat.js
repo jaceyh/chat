@@ -53,7 +53,7 @@ const Chat = ({ route, navigation, db, storage, isConnected }) => {
         return () => {
             if (unsubMessages) unsubMessages();
         }
-    }, [/*`${messages}`,*/ isConnected]);
+    }, [isConnected]);
 
 
     const cacheMessages = async (messagesToCache) => {
