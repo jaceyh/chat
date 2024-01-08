@@ -39,7 +39,7 @@ Here's how I set one up:
 * Note: If you're using an older machine, like my 2017 Macbook Air, you'll need to select an older version of these items that corresponds with API Level 33 and only encountered minor issues.
 5. Back on the Welcome Screen, select "More Options" again and select "Virtual Device Manager" from the dropdown menu.
 6. Create a Virtual Device and be sure to select one with the Google Play Icon.
-7. Once your virtual device is created, click on the Play button and your emulator will "Start Up".
+7. Once your virtual device is created, Open Virtual Device Manager again, and click on the Play butto. Your emulator will "Start Up".
 
 ### Setting Up Storage
 If you want your App to save any message data from the chat, you'll need a storage solution.  I used Google Firebase, instructions for implementing below.
@@ -48,7 +48,11 @@ If you want your App to save any message data from the chat, you'll need a stora
 3. From the **Build** menu on the left hand side of your screen, click on **Firestore Database**, and then click on Create Database in the main screen.
 4. Create your Database in Production Mode, Select the Multi-region network that's closest to you, and click Next.
 5. Click on the **Rules** tab and change ```allow read, write: if false;``` to ```allow read, write: if true;``` and click on the Publish button.
-6. Once you create your Expo project (next section), you'll come back to Firebase to register your app and connect it to your Web App with the Firebase SDK.
+6. Once you create your Expo project (next section), you'll come back to Firebase to register your app and connect it to your **Web App** with the Firebase SDK.<br>
+**Once you're back to your App in Firebase:**
+* Open your **Project Settings** from the Settings Icon on the top left of your screen and scroll down to **Your Apps**.  
+* You'll want to register your App as a **Web App** so click on the ```</>``` icon.
+* Name your App, then follow the instructions to include your ```firebaseConfig``` information in your code file.
 
 ## Creating an Expo Project
 1. ```npx create-expo-app your-app-title --template```<br>
@@ -76,10 +80,37 @@ Make sure to import the following into your corresponding files:
 Your App.js file will need:
 * ```StyleSheet``` from ```'react-native'```
 * ```useEffect``` from ```'react'```
-* ```NavigationContainer``` from ```@react-navigation/native```
-* ```createNavigationStackNavigator``` from ```@react-navigation/native-stack```
-* ```initializeApp``` from ```firebase/app```
-* ```getFirestone, disableNetwork, enableNetwork``` from ```firebase/firestore```
-* ```getStorage``` from ```firebase/storage```
+* ```NavigationContainer``` from ```'@react-navigation/native'```
+* ```createNavigationStackNavigator``` from ```'@react-navigation/native-stack'```
+* ```initializeApp``` from ```'firebase/app'```
+* ```getFirestone, disableNetwork, enableNetwork``` from ```'firebase/firestore'```
+* ```getStorage``` from ```'firebase/storage'```
+* ```useNetInfo``` from ```'@react-native-community/netinfo'```
+
+### Start.js
+* ```StyleSheet, View, Text, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, Alert``` from ```'react-native'```
+* ```useState``` from ```'react'```
+* ```getAuth, signInAnonymously``` from ```'firebase/auth'```
+
+### Chat.js 
+* ```GiftedChat, InputToolbar, Send``` from ```'react-native-gifted-chat'```
+* ```StyleSheet, View, Platform, KeyboardAvoidingView``` from ```'react-native'```
+* ```useState, useEffect ``` from ```'react'``
+* ```MapView``` from ```'react-native-maps'```
+* ```collection, onSnapshot, query, addDoc, orderBy``` from ```'firebase/firestore'```
+* ```AsyncStorage``` from ```'react-native-async-storage/async-storage'```
+
+### CustomActions.js
+* ```StyleSheet, View, Text, TextInput, TouchableOpacity, Alert``` from ```'react-native'```
+* ```useActionSheet``` from ```'@expo/react-native-action-sheet'```
+* ```useState``` from ```'react'```
+* ```ImagePicker``` from ```'expo-image-picker'```
+* ```MediaLibrary``` from ```'expo-media-library'```
+* ```Location``` from ```'expo-location'```
+* ```ref, uploadBytes, getDownloadURL``` from ```'firebase/storage'```
+
+
+
+
 
 

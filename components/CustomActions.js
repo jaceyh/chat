@@ -16,10 +16,10 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
 
     const actionSheet = useActionSheet();
 
-    /*const states for images and locations
+    //const states for images and locations
     const [image, setImage] = useState(null);
     const [location, setLocation] = useState(null);
-    */
+
 
     //options available with press of action sheet menu button
     const onActionPress = () => {
@@ -85,19 +85,25 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID })
         let permissions = await Location.requestForegroundPermissionsAsync();
     
         if (permissions?.granted) {
-            const location = await Location.getCurrentPositionAsync({});
-            setLocation(location);
-            if (location) {
-                onSend({
-                    location: {
-                        longitude: location.coords.longitude,
-                        latitude: location.coords.latitude,
-                    },
-                });
-            }else Alert.alert("Error occured while fetching location");
-        } else {
-            Alert.alert("Permissions to read location aren't granted");
-        }
+            
+                const location = await Location.getCurrentPositionAsync({});
+                setLocation(location);
+                if (location) {
+                    try{
+                    onSend({
+                        location: {
+                            longitude: location.coords.longitude,
+                            latitude: location.coords.latitude,
+                        },
+                    });
+                    }catch (error) {
+                        console.error("Error sending location.", error);
+                        Alert.alert("Error sending location.");
+                    }
+            } else {
+                Alert.alert("Permissions to read location aren't granted");
+            }
+        };
     }
 
     const generateReference = (uri) => {
