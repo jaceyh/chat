@@ -74,3 +74,6 @@ In your project directory you'll need to install the following:<br>
 * ```"react-native-screens"```
 * ```"@react-native-async-storage/async-storage"```<br>
 <br>
+
+## Here's my Chat App in action
+[<img src="https://youtube.com/shorts/PCV3IW9spaw" width="50%">](https://youtube.com/shorts/PCV3IW9spaw "Chat App Demo")
