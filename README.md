@@ -76,4 +76,4 @@ In your project directory you'll need to install the following:<br>
 <br>
 
 ## Here's my Chat App in action
-[<img src="https://youtube.com/shorts/PCV3IW9spaw" width="50%">](https://youtube.com/shorts/PCV3IW9spaw "Chat App Demo")
+[<img src="https://youtube.com/shorts/0DASOt2g8Sg" width="75%">](https://youtube.com/shorts/0DASOt2g8Sg "Chat App Demo")
